@@ -103,7 +103,7 @@ int choix_valide(int choix, int choix_dispo[], int nombre_choix){
 	return valide;
 }
 
-int poste_valide(char poste,char poste_dispo[],int nombre_poste){
+int char_valide(char poste,char poste_dispo[],int nombre_poste){
 	int valide = 0;
 	for(int i=0;i<nombre_poste;i++){
 		if(poste==poste_dispo[i]){
@@ -179,11 +179,11 @@ int ajouter_un_joueur(){
         printf("\n\nChoix->: ");
         scanf("%c",&Njoueur.poste);
         printf("\n\n");
-        if(!poste_valide(Njoueur.poste,poste_dispo,4)){
+        if(!char_valide(Njoueur.poste,poste_dispo,4)){
         	printf("Choix non valide\n");
         	while(getchar()!='\n');        	
 		}
-    }while(!poste_valide(Njoueur.poste,poste_dispo,4));
+    }while(!char_valide(Njoueur.poste,poste_dispo,4));
     
     
     do{
@@ -261,7 +261,7 @@ void ajouter(){
     } else{
     	printf("2: Ajouter plusieurs joueurs en une seule operation.\n");
         for(int i=0;i<4;i++){
-        	printf("Ajouter %d joueurs\n",4-i);
+        	printf("Il vous reste %d joueurs a entrer\n",4-i);
         	ajouter_un_joueur();
 		}
 		printf("Les joueurs\n\n");
@@ -299,8 +299,22 @@ void modifier(){
 
 
 void supprimer(){
+	char id[6], index, oui_non,id_existe;
 	afficher();
-	
+	printf("ID de joueur a supprimer: ");
+	scanf("%s", &id);
+	for(int i=0;i<nombre_joueurs;i++){
+		if(strcmp(id,joueurs[i].Id)==0){
+			id_existe = 1;
+			index = i;
+			break;
+		}
+	}
+	if(id_existe){
+		printf("Le joueur avec ID = %s existe, il va etre supprimer\n", id);
+		printf("Supprimer?: o=oui n=non\n");
+		scanf("%c", &oui_non);
+	}
 }
 
 void rechercher(){
