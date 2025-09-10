@@ -19,8 +19,8 @@ struct Joueur{
     char statut[10];
 };
 
-int nombre_joueurs = 0, choix, estInt;;
-struct Joueur joueurs[10];//Tableau dynamique
+int nombre_joueurs = 0;;
+struct Joueur joueurs[10];//Tableau doit etre dynamique
 
 int donnerId(struct Joueur joueur) {
     char id[6];
@@ -52,10 +52,14 @@ int choix_valide(int choix, int choix_dispo[], int nombre_choix){
 	return valide;
 }
 
+int id_valide(char id[]){
+	
+}
+
 
 int menu(){
 	int choix, choix_dispo[7] = {1,2,3,4,5,6,7};
-	printf("\t\t\t\t=============PROJET DE FIN DE SAS=============\n\n");
+	printf("\t\t\t\t=============PROJET DE FIN DE SAS 2025=============\n\n");
 	printf("\t\t\t\t\t========Mohcine OTMANE======\n");
 	printf("\t\t\t\t\t========Houssni OUCHAD======\n\n");
 	printf("1. Ajouter des joueurs\n");
@@ -73,13 +77,14 @@ int menu(){
         	printf("Choix non valide\n");
         	while(getchar()!='\n');        	
 		}
-    }while(!choix_valide(choix,choix_dispo,2));
+    }while(!choix_valide(choix,choix_dispo,7));
+    printf("le choix est: %d\n",choix);
 	return choix;
 }
 
 
 int ajouter_un_joueur(){
-    int nombre_joueurs_avant = nombre_joueurs, numeroMaillot;
+    int nombre_joueurs_avant = nombre_joueurs, numeroMaillot,estInt;
     printf("1: Ajouter un nouveau joueur.\n");
     struct Joueur Njoueur;
     donnerId(Njoueur);
@@ -114,10 +119,13 @@ int ajouter_un_joueur(){
 }
 
 void ajouter(){
-	int choix_dispo[2] = {1,2};
+	int choix, choix_dispo[2] = {0,1,2};
+	Ajouter:
+	system("cls");
     printf("Ajouter un joueur\n");
     printf("1: Ajouter un nouveau joueur.\n");
     printf("2: Ajouter plusieurs joueurs en une seule operation.\n");
+    printf("0. Menu Principale\n");
         
     do{
         printf("\n\nChoix->: ");
@@ -130,14 +138,18 @@ void ajouter(){
     }while(!choix_valide(choix,choix_dispo,2));
     
 
-    if(choix==1){
+    if(choix==0){
+        return;
+    } else if(choix==1){
+        printf("1: Ajouter un joueur.\n");
         ajouter_un_joueur();
     } else{
-        printf("2: Ajouter plusieurs joueurs en une seule operation.\n");
+    	printf("2: Ajouter plusieurs joueurs en une seule operation.\n");
         for(int i=0;i<4;i++){
         	ajouter_un_joueur();
 		}
-    }
+	}
+	goto Ajouter;
 }
 
 
@@ -163,42 +175,64 @@ void modifier(){
 
 }
 
+
 void supprimer(){
 	afficher();
 	
 }
 
 void rechercher(){
-	char id[5], estInt;
+	char id[5];
+	int choix, choix_dispo[3] = {0,1,2};
 	printf("MENU DE RECHERCHE\n");
 	printf("1. Recherche par ID\n");
 	printf("2. Rcharche par nom\n");
+	printf("0. Menu Principale\n");
 	do{
         printf("\n\nChoix->: ");
         scanf("%d",&choix);
+        printf("Choix = %d",choix);
         printf("\n\n");
-        if(!choix_valide(choix,choix_dispo,2)){
+        if(!choix_valide(choix,choix_dispo,3)){
         	printf("Choix non valide\n");
         	while(getchar()!='\n');        	
 		}
-    }while(!choix_valide(choix,choix_dispo,2));
-    
+    }while(!choix_valide(choix,choix_dispo,3));
 	printf("\n");
 	
-	do{
-		printf("ID de joueur a chercher: ");
-	}while(id[0]>'Z' || id[1]>'9'|| id[2]>'9'|| id[3]>'9'|| id[4]>'9');
-	printf("\n");
-	for(int i=0;i<nombre_joueurs;i++){
-    	if(id==joueurs[i].Id){
-    		printf("Le joueur avec ID = %s est trouve\n",id);
-    		Afficher_un_joueur(i);
-		}
-    }
+	if(choix==0){
+		return;
+	} else if(choix==1){
+		do{
+			printf("ID de joueur a chercher: ");
+			scanf("%d",&id);
+			if(!id_valide(id)){
+	        	printf("Choix non valide\n");
+	        	while(getchar()!='\n');        	
+			}
+		}while(!id_valide(id));
+		printf("\n");
+		for(int i=0;i<nombre_joueurs;i++){
+	    	if(id==joueurs[i].Id){
+	    		printf("Le joueur avec ID = %s est trouve\n",id);
+	    		Afficher_un_joueur(i);
+			}
+	    }
+	} else{
+		
+	}
+	
+	
 }
 
 void Stat(){
-
+	printf("Statistiques\n\n");
+	printf("1: Afficher le nombre total de joueurs dans l’équipe.\n");
+	printf("2: Afficher l’âge moyen des joueurs.\n");
+	printf("3: Afficher les joueurs ayant marqué plus de X buts (X introduit par l’utilisateur).\n");
+	printf("4: Afficher le meilleur buteur (joueur avec le maximum de buts).\n");
+	printf("5: Afficher le joueur le plus jeune et le plus âgé.\n");
+	printf("0: Menu Principale\n\n");
 }
 
 void about(){
@@ -212,24 +246,44 @@ void about(){
 }
 
 int main(){
-	int choix, util_exit=0;
+	int choix = 0, util_exit=0;
 	do{
+		system("cls");
 		choix = menu();
+		
 		switch(choix){
 			case 1:
+				system("cls");
 				ajouter();
+				break;
 			case 2:
+				system("cls");
 				afficher();
+				break;
 			case 3:
+				system("cls");
 				modifier();
+				break;
 			case 4:
 				supprimer();
+				system("cls");
+				break;
 			case 5:
+				system("cls");
 				rechercher();
+				break;
 			case 6:
+				system("cls");
 				stat();
+				break;
 			case 7:
+				system("cls");
 				about();
+				break;
+			default:
+				system("cls");
+				menu();
+				break;
 		}
 		
 	}while(!util_exit);
