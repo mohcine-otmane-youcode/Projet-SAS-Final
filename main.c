@@ -85,7 +85,7 @@ void initialiserDate(struct Joueur* joueur){
     joueur->dateNaissance = &dateNaissance;
 }
 
-int calculerAge(struct Joueur* joueur){
+void calculerAge(struct Joueur* joueur){
 	//Calculer l'age de joueur
 	time_t temps_0 = time(0);
 	struct tm* date_aujourdhui = localtime(&temps_0);
