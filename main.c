@@ -19,10 +19,10 @@ struct Joueur{
     char statut[10];
 };
 
-int nombre_joueurs = 0;;
+int nombre_joueurs = 0,util_exit=0;
 struct Joueur joueurs[10];//Tableau doit etre dynamique
 
-int donnerId(struct Joueur joueur) {
+int donnerId(struct Joueur* joueur) {
     char id[6];
     id[0] = 'A' + (nombre_joueurs / 10000);
     
@@ -33,7 +33,7 @@ int donnerId(struct Joueur joueur) {
     }
     id[5] = '\0';
 
-    strcpy(joueur.Id, id);
+    strcpy(joueur->Id, id);
     return 1;
 }
 
@@ -85,9 +85,8 @@ int menu(){
 
 int ajouter_un_joueur(){
     int nombre_joueurs_avant = nombre_joueurs, numeroMaillot,estInt;
-    printf("1: Ajouter un nouveau joueur.\n");
     struct Joueur Njoueur;
-    donnerId(Njoueur);
+    donnerId(&Njoueur);
     printf("Nom de joueur: ");
     scanf("%s", &Njoueur.nom); 
     printf("\n");
@@ -115,11 +114,12 @@ int ajouter_un_joueur(){
     printf("\n");
     printf("Succes: Le joueur a ete ajoute\n");
     joueurs[nombre_joueurs] = Njoueur;
+    
     nombre_joueurs++;
 }
 
 void ajouter(){
-	int choix, choix_dispo[2] = {0,1,2};
+	int choix, choix_dispo[3] = {0,1,2};
 	Ajouter:
 	system("cls");
     printf("Ajouter un joueur\n");
@@ -131,11 +131,11 @@ void ajouter(){
         printf("\n\nChoix->: ");
         scanf("%d",&choix);
         printf("\n\n");
-        if(!choix_valide(choix,choix_dispo,2)){
+        if(!choix_valide(choix,choix_dispo,3)){
         	printf("Choix non valide\n");
         	while(getchar()!='\n');        	
 		}
-    }while(!choix_valide(choix,choix_dispo,2));
+    }while(!choix_valide(choix,choix_dispo,3));
     
 
     if(choix==0){
@@ -143,19 +143,35 @@ void ajouter(){
     } else if(choix==1){
         printf("1: Ajouter un joueur.\n");
         ajouter_un_joueur();
+        printf("Le joueur\n\n");
+        Afficher_un_joueur(nombre_joueurs-1);
+        printf("\n\nEst ajoute avec succes\n");
+        printf("Appuier sur Entrer pour continuer\n");
+        getchar();
+        getchar();
     } else{
     	printf("2: Ajouter plusieurs joueurs en une seule operation.\n");
         for(int i=0;i<4;i++){
+        	printf("Ajouter %d joueurs\n",4-i);
         	ajouter_un_joueur();
 		}
+		printf("Les joueurs\n\n");
+		for(int i=0;i<4;i++){
+	        Afficher_un_joueur(nombre_joueurs-i-1);
+		}
+	    printf("\n\nOnt ete ajoutes avec succes\n\n");
+        printf("Appuier sur Entrer pour continuer\n");
+        getchar();
+        getchar();
 	}
 	goto Ajouter;
 }
 
 
 void Afficher_un_joueur(int IdJoueur){
+	printf("Nom de joueur: %s\n", joueurs[IdJoueur].Id);
 	printf("Nom de joueur: %s\n", joueurs[IdJoueur].nom); 
-    printf("Numero de maillot de joueur: %s\n", joueurs[IdJoueur].numeroMaillot); 
+    printf("Numero de maillot de joueur: %d\n", joueurs[IdJoueur].numeroMaillot); 
     printf("Poste de joueur: %s\n", joueurs[IdJoueur].poste); 
 }
 
@@ -169,6 +185,8 @@ void afficher(){
 	} else {
 		printf("Pas de joueurs disponibles\n");
 	}
+	getchar();
+	getchar();
 }
 
 void modifier(){
@@ -204,12 +222,17 @@ void rechercher(){
 		return;
 	} else if(choix==1){
 		do{
+			int id_existe = 0;
 			printf("ID de joueur a chercher: ");
 			scanf("%d",&id);
-			if(!id_valide(id)){
-	        	printf("Choix non valide\n");
-	        	while(getchar()!='\n');        	
+			for(int i=0;i<nombre_joueurs;i++){
+				if(id==joueurs[i].Id){
+					printf("Le joureur avec ID = %s est trouve\n",id);
+					Afficher_un_joueur(i);
+					printf("Apuier Entrer pour continuer\n");
+				}
 			}
+			
 		}while(!id_valide(id));
 		printf("\n");
 		for(int i=0;i<nombre_joueurs;i++){
@@ -246,11 +269,10 @@ void about(){
 }
 
 int main(){
-	int choix = 0, util_exit=0;
+	int choix = 0;
 	do{
 		system("cls");
 		choix = menu();
-		
 		switch(choix){
 			case 1:
 				system("cls");
