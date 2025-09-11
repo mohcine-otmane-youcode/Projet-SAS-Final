@@ -100,7 +100,6 @@ int entrer_choix(int *choix ,int nombre_choix){
         printf("\n\n");
         for(int i=0;i<nombre_choix;i++){
             if(*choix==i){
-                printf("Erreur: entrer soit 0,1,2,3,4 ou 5\n");
                 bon_choix=1;
             }
         }
@@ -151,7 +150,7 @@ void afficher_un_joueur(int IdJoueur){
 
 }
 void afficher(){
-    int choix, choix_dispo[4] = {0,1,2,3};
+    int choix;
     char poste;
     Affichage:
         printf("\t\t\t\t\t\x1b[42m           MENU DE AFFICHAGE           \x1b[0m\n\n");
@@ -160,21 +159,13 @@ void afficher(){
         printf("\t\t\t\t\t3. Afficher les joueurs par poste.\n");//v
         printf("\t\t\t\t\t0. Menu Principale\n");
         entrer_choix(&choix, 4);
-        do{
-	        printf("\n\nChoix->: ");
-	        scanf("%d",&choix);
-	        printf("\n\n");
-	        if(choix!=0 && choix!=1 && choix!=2 && choix!=3 && choix!=4 && choix!=5){
-	        	printf("Erreur: entrer soit 0,1,2,3,4 ou 5\n");
-	        	while(getchar()!='\n');
-			}
-	    }while(choix!=0 && choix!=1 && choix!=2 && choix!=3 && choix!=4 && choix!=5);
-        
         if(choix==0){
             return;
         } else if(choix==1){
+            printf("Triage par nom complete\n");
             trier_nom();
         } else if(choix==2){
+            printf("Triage par age complete\n");
             trier_age();
         } else if(choix==3){
             do{
@@ -414,18 +405,18 @@ void supprimer(){
 
         char reponse;
         do{
-            printf("Reponse: ");
+            printf("Reponse:\\> ");
             scanf(" %c", &reponse);
-            if(reponse!='o'&& reponse!='O' && reponse!='y' && reponse!='Y'){
+            if(reponse!='o' && reponse!='O' && reponse!='y' && reponse!='Y'){
                 printf("\x1b[1;31mErreur: choix non valide (o/n)\x1b[0m\n");
                 while(getchar()!='\n');
             }
-        }while(reponse!='o'&& reponse!='O' && reponse!='y' && reponse!='Y');
+        }while(reponse!='o' && reponse!='O' && reponse!='y' && reponse!='Y');
 
         if(reponse=='o' || reponse=='O'){
             supprimer_un_contact(index_joueur);
             printf("\n\x1b[1;32mLe joueur supprime avec succes.\x1b[0m\n");
-        } else {
+        } else if(reponse=='n' || reponse=='N'){
             printf("\n\x1b[1;34mLe joueur pas supprime.\x1b[0m\n");
             return;
         }
@@ -509,7 +500,7 @@ int age_moyen(){
 int max_min(int un_si_max_age, int un_si_max_buts){//max_min(1,0)->max age, max_min(2,0)->min age, max_min(2,0)->min age, max_min(0,1)->max buts, max(0,2)->min buts
 	int max,min;
 	if(un_si_max_age==1){
-		for(int i=0;i<nombre_joueurs-1;i++) {
+		for(int i=0;i<nombre_joueurs;i++) {
             max = equipe[i].age;
             for(int j= 0;j<nombre_joueurs;j++) {
                 if(max < equipe[j].age) {
@@ -519,7 +510,7 @@ int max_min(int un_si_max_age, int un_si_max_buts){//max_min(1,0)->max age, max_
         }
 		return max;
 	} else if(un_si_max_age==2){
-        for(int i=0;i<nombre_joueurs-1;i++) {
+        for(int i=0;i<nombre_joueurs;i++) {
             min = equipe[i].age;
             for(int j=0; j<nombre_joueurs;j++) {
                 if(min > equipe[j].age) {
@@ -531,7 +522,7 @@ int max_min(int un_si_max_age, int un_si_max_buts){//max_min(1,0)->max age, max_
 	}
 
     if(un_si_max_buts==1){
-		for(int i = 0; i < nombre_joueurs - 1; i++) {
+		for(int i = 0; i < nombre_joueurs; i++) {
             max = equipe[i].buts;
             for(int j = i + 1; j < nombre_joueurs; j++) {
                 if(max < equipe[j].buts) {
@@ -541,7 +532,7 @@ int max_min(int un_si_max_age, int un_si_max_buts){//max_min(1,0)->max age, max_
         }
 		return max;
 	} else if(un_si_max_buts==2){
-        for(int i = 0; i < nombre_joueurs - 1; i++) {
+        for(int i = 0; i < nombre_joueurs; i++) {
             min = equipe[i].buts;
             for(int j = i + 1; j < nombre_joueurs; j++) {
                 if(min > equipe[j].buts) {
@@ -554,7 +545,7 @@ int max_min(int un_si_max_age, int un_si_max_buts){//max_min(1,0)->max age, max_
 }
 
 void stat(){
-	int choix, choix_dispo[6] = {0,1,2,3,4,5};
+	int choix;
 	
 	stat:
 		system("cls");
