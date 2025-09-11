@@ -140,7 +140,11 @@ void afficher_un_joueur(int IdJoueur){
 }
 
 void afficher(){
-	printf("\t\t\t\t\t\t\t\x1b[42m           Affichage de joueurs        \x1b[0m\n\n\n");
+	printf("\t\t\t\t\t\t\t\x1b[42m           MENU DE AFFICHAGE           \x1b[0m\n\n");
+	printf("\t\t\t\t\t\t\t1. Trier les joueurs par Nom.\n");
+	printf("\t\t\t\t\t\t\t2. Trier les joueurs par Age.\n");
+	printf("\t\t\t\t\t\t\t2. Afficher les joueurs par poste.\n");
+	printf("\t\t\t\t\t\t\t0. Menu Principale\n");
 	// trier_nom();
 	printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
     if(nombre_joueurs>0){
@@ -154,7 +158,9 @@ void afficher(){
 	getchar();
 }
 
-
+void modifier(){
+	
+}
 int ajouter_un_joueur(){
     int nombre_joueurs_avant = nombre_joueurs,estInt, numeroMaillot_unique;
     char poste_dispo[4] = {'g', 'd', 'm', 'a'};
@@ -216,7 +222,6 @@ int ajouter_un_joueur(){
     
     nombre_joueurs++;
 }
-
 void ajouter(){
 	int choix, choix_dispo[3] = {0,1,2};
 	Ajouter:
@@ -265,17 +270,6 @@ void ajouter(){
 	}
 	goto Ajouter;
 }
-
-
-
-
-
-
-
-void modifier(){
-	
-}
-
 void supprimer_un_contact(int IdJoueur){
 	printf("Le joueur\n");
 	printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
@@ -285,8 +279,6 @@ void supprimer_un_contact(int IdJoueur){
     }
     nombre_joueurs--;
 }
-
-
 void supprimer(){
     char id[6];
     int index_joueur = -1;
@@ -336,8 +328,6 @@ void supprimer(){
     while(getchar()!='\n');
     getchar();
 }
-
-
 void rechercher(){
     char id[6];
     char nom[20];
@@ -399,9 +389,6 @@ void rechercher(){
     while(getchar()!='\n');
     getchar();
 }
-
-
-
 int age_moyen(){
 	int s=0;
 	for(int i=0;i<nombre_joueurs;i++){
@@ -427,8 +414,8 @@ void stat(){
 	stat:
 		system("cls");
 		printf("\t\t\t\t\t\t\t\x1b[42m           MENU DE STATISTIQUES           \x1b[0m\n\n");
-		printf("\t\t\t\t\t\t\t\x1b[1;32m1. Nombre total de joueurs.\x1b[0m\n");
-		printf("\t\t\t\t\t\t\t2. Age moyen des joueurs.\n");
+		printf("\t\t\t\t\t\t\t\x1b[1;32m1. Nombre total de joueurs.\x1b[0m\n");//v
+		printf("\t\t\t\t\t\t\t2. Age moyen des joueurs.\n");//v
 		printf("\t\t\t\t\t\t\t3. les joueurs ayant marque plus de X buts.\n");
 		printf("\t\t\t\t\t\t\t\x1b[1;31m4. Le top buts.\x1b[0m\n");
 		printf("\t\t\t\t\t\t\t5. le joueur le plus jeune et le plus age.\n");
@@ -478,18 +465,16 @@ void about(){
 	getchar();
 	getchar();
 }
-
-
 int menu(){
 	int choix, choix_dispo[7] = {1,2,3,4,5,6,7};
 	
 	printf("\t\t\t\t\t\t\t\x1b[42m           MENU PRINCIPALE           \x1b[0m\n\n");
-	printf("\t\t\t\t\t\t\t\x1b[1;32m1. Ajouter des joueurs\x1b[0m\n");
-	printf("\t\t\t\t\t\t\t2. Voir tous les joueurs\n");
-	printf("\t\t\t\t\t\t\t3. Modifier un joueur\n");
-	printf("\t\t\t\t\t\t\t\x1b[1;31m4. Supprimer un joueur\x1b[0m\n");
-	printf("\t\t\t\t\t\t\t5. Rechercher un joueur\n");
-	printf("\t\t\t\t\t\t\t6. Statistiques\n");
+	printf("\t\t\t\t\t\t\t\x1b[1;32m1. Ajouter des joueurs\x1b[0m\n");//v
+	printf("\t\t\t\t\t\t\t2. Voir tous les joueurs\n");//v
+	printf("\t\t\t\t\t\t\t3. Modifier un joueur\n");//x
+	printf("\t\t\t\t\t\t\t\x1b[1;31m4. Supprimer un joueur\x1b[0m\n");//v
+	printf("\t\t\t\t\t\t\t5. Rechercher un joueur\n");//v
+	printf("\t\t\t\t\t\t\t6. Statistiques\n");//x
 	printf("\t\t\t\t\t\t\t7. About\n");
 
 
