@@ -15,13 +15,15 @@ struct Joueur{
 	struct tm* dateInscription;
 };
 struct tm dateNaissance = {0};
-int nombre_joueurs = 3,util_exit=0, nombre_id_historiques = 0;
+int nombre_joueurs = 3,util_exit=0, nombre_id = 4;
 
-char historique_id[10][6] = {"0001","0002","0003"};//id supprime ne doit pas etre reutilise
+char poste_dispo[4] = {'g', 'd', 'm', 'a'};;//id supprime ne doit pas etre reutilise
 
-struct Joueur joueurs[10] = {
+
+//--------------Initialisations--------------
+struct Joueur equipe[10] = {
     { .numeroMaillot = 10, .age = 0, .buts = 15, .Id = "0001", .nom = "Wahid", .poste = 'a', .statut = 't', 
-      .dateNaissance = &(struct tm){.tm_mday=24, .tm_mon=5-1, .tm_year=1987-1900}, 
+      .dateNaissance = &(struct tm){.tm_mday=24, .tm_mon=5-1, .tm_year=1999-1900}, 
       .dateInscription = &(struct tm){.tm_mday=1, .tm_mon=1-1, .tm_year=2023-1900} },
 
     { .numeroMaillot = 1, .age = 0, .buts = 0, .Id = "0002", .nom = "Sali", .poste = 'g', .statut = 't', 
@@ -29,19 +31,25 @@ struct Joueur joueurs[10] = {
       .dateInscription = &(struct tm){.tm_mday=1, .tm_mon=1-1, .tm_year=2023-1900} },
 
     { .numeroMaillot = 4, .age = 0, .buts = 5, .Id = "0003", .nom = "Arbi", .poste = 'd', .statut = 'r', 
-      .dateNaissance = &(struct tm){.tm_mday=30, .tm_mon=3-1, .tm_year=1986-1900}, 
-      .dateInscription = &(struct tm){.tm_mday=1, .tm_mon=1-1, .tm_year=2023-1900} }
+      .dateNaissance = &(struct tm){.tm_mday=30, .tm_mon=3-1, .tm_year=1988-1900}, 
+      .dateInscription = &(struct tm){.tm_mday=1, .tm_mon=1-1, .tm_year=2023-1900} },
+      
+    { .numeroMaillot = 6, .age = 0, .buts = 7, .Id = "0004", .nom = "Dahmoch", .poste = 'm', .statut = 't', 
+      .dateNaissance = &(struct tm){.tm_mday=34, .tm_mon=7-1, .tm_year=1999-1900}, 
+      .dateInscription = &(struct tm){.tm_mday=1, .tm_mon=3-1, .tm_year=2025-1900} }
 };
 
 void initialiserId(struct Joueur* joueur) {
     char id[6];
-    sprintf(id, "%04d", nombre_id_historiques + 1);
+
+    //Validation de nouveau ID
+    sprintf(id, "%04d", nombre_id + 1);
+
     strcpy(joueur->Id, id);
-    strcpy(historique_id[nombre_id_historiques], id);
-    nombre_id_historiques++;
+   
+    nombre_id++;
+    printf("ID succes\n");
 }
-
-
 void initialiserDate(struct Joueur* joueur){
 	int estInt;
 	printf("Entrer la date de naissance de joueur\n");
@@ -76,13 +84,15 @@ void initialiserDate(struct Joueur* joueur){
     dateNaissance.tm_mon -= 1;
     joueur->dateNaissance = &dateNaissance;
 }
-
 void calculerAge(struct Joueur* joueur){
 	time_t temps_0 = time(0);
 	struct tm* date_aujourdhui = localtime(&temps_0);
 	joueur->age = date_aujourdhui->tm_year - joueur->dateNaissance->tm_year;
 }
 
+
+
+//--------------Validations--------------
 int choix_valide(int choix, int choix_dispo[], int nombre_choix){
 	int valide = 0;
 	for(int i=0;i<nombre_choix;i++){
@@ -103,24 +113,56 @@ int char_valide(char poste,char poste_dispo[],int nombre_poste){
 	return valide;
 }
 
+// int entrer_choix(int *choix, char titre_choix[], int unique){
+//     do{
+//         numeroMaillot_unique = 1;
+//         printf("%s de joueur: ",titre_choix);
+//         getchar();
+//         estInt = scanf("%d", choix);
+//         printf("\n");
+//         //numeroMaillot unique ?
+//         if(unique){
+//             for(int i=0;i<nombre_joueurs;i++){
+//             if(Njoueur.numeroMaillot==equipe[i].numeroMaillot){
+//                 numeroMaillot_unique = 0;
+//             }
+//             }
+//             if(numeroMaillot_unique==0){
+//                 printf("Ce %s existe deja\n", titre_choix);
+//             }
+//         }
+        
+//     }while(!numeroMaillot_unique || Njoueur.numeroMaillot<0 || !estInt);
+// }
 
 
-
-
+//--------------Afficher--------------
 void trier_nom() {
     for(int i = 0; i < nombre_joueurs - 1; i++) {
         for(int j = i + 1; j < nombre_joueurs; j++) {
-            if(strcmp(joueurs[i].nom, joueurs[j].nom) > 0) {
-                struct Joueur min = joueurs[i];
-                joueurs[i] = joueurs[j];
-                joueurs[j] = min;
+            if(strcmp(equipe[i].nom, equipe[j].nom) > 0) {
+                struct Joueur temp = equipe[i];
+                equipe[i] = equipe[j];
+                equipe[j] = temp;
+            }
+        }
+    }
+}
+
+int trier_age(){
+    for(int i = 0; i < nombre_joueurs - 1; i++) {
+        for(int j = i + 1; j < nombre_joueurs; j++) {
+            if(equipe[i].age > equipe[j].age) {
+                struct Joueur temp = equipe[i];
+                equipe[i] = equipe[j];
+                equipe[j] = temp;
             }
         }
     }
 }
 
 void afficher_un_joueur(int IdJoueur){
-	struct Joueur *joueur = &joueurs[IdJoueur];
+	struct Joueur *joueur = &equipe[IdJoueur];
 	char postes[20], statuts[20];
     switch(joueur->poste){
         case 'g': strcpy(postes, "Gardien"); break;
@@ -138,38 +180,83 @@ void afficher_un_joueur(int IdJoueur){
 	printf("\t\t\t\t\t%-5s %-10s %-15d %-5d %-5d %-15s %-15s\n\n",joueur->Id,joueur->nom,joueur->numeroMaillot,joueur->age,joueur->buts,postes,statuts);
 
 }
-
 void afficher(){
-	printf("\t\t\t\t\t\t\t\x1b[42m           MENU DE AFFICHAGE           \x1b[0m\n\n");
-	printf("\t\t\t\t\t\t\t1. Trier les joueurs par Nom.\n");
-	printf("\t\t\t\t\t\t\t2. Trier les joueurs par Age.\n");
-	printf("\t\t\t\t\t\t\t2. Afficher les joueurs par poste.\n");
-	printf("\t\t\t\t\t\t\t0. Menu Principale\n");
-	// trier_nom();
-	printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
-    if(nombre_joueurs>0){
-    	for(int i=0;i<nombre_joueurs;i++){
-        	afficher_un_joueur(i); 
-    	}
-	} else {
-		printf("Pas de joueurs disponibles\n");
-	}
-	getchar();
-	getchar();
+    int choix, choix_dispo[4] = {0,1,2,3};
+    char poste;
+    Affichage:
+        printf("\t\t\t\t\t\x1b[42m           MENU DE AFFICHAGE           \x1b[0m\n\n");
+        printf("\t\t\t\t\t1. Trier les joueurs par Nom.\n");//v
+        printf("\t\t\t\t\t2. Trier les joueurs par Age.\n");//v
+        printf("\t\t\t\t\t3. Afficher les joueurs par poste.\n");//v
+        printf("\t\t\t\t\t0. Menu Principale\n");
+        
+        do{
+	        printf("\n\nChoix->: ");
+	        scanf("%d",&choix);
+	        printf("\n\n");
+	        if(!choix_valide(choix,choix_dispo,6)){
+	        	printf("Erreur: entrer soit 0,1,2,3,4 ou 5\n");
+	        	while(getchar()!='\n');
+			}
+	    }while(!choix_valide(choix,choix_dispo,6));
+        
+        if(choix==0){
+            return;
+        } else if(choix==1){
+            trier_nom();
+        } else if(choix==2){
+            trier_age();
+        } else if(choix==3){
+            do{
+                printf("\n\nPoste->: ");
+                scanf(" %c",&poste);
+                printf("\n\n");
+                if(!char_valide(poste,poste_dispo,4)){
+                    printf("Erreur: entrer soit g,a,m ou d\n");
+                    while(getchar()!='\n');
+                }
+            }while(!char_valide(poste,poste_dispo,4)); 
+        }
+        
+        printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
+        if(nombre_joueurs>0){
+            if(choix==3){//Si choix=3 donc c'est l'affichage par poste
+                for(int i=0;i<nombre_joueurs;i++){
+                    if(equipe[i].poste==poste){
+                        afficher_un_joueur(i); 
+                    }
+                }
+            } else{
+                for(int i=0;i<nombre_joueurs;i++){
+                    afficher_un_joueur(i); 
+                }
+            }
+            
+        } else {
+            printf("Pas de joueurs disponibles\n");
+        }
+        getchar();
+        getchar();
+    goto Affichage;
 }
 
-void modifier(){
-	
-}
+//--------------Ajouter--------------
 int ajouter_un_joueur(){
     int nombre_joueurs_avant = nombre_joueurs,estInt, numeroMaillot_unique;
-    char poste_dispo[4] = {'g', 'd', 'm', 'a'};
     struct Joueur Njoueur;
 
     initialiserId(&Njoueur);
-	printf("Nom de joueur: ");
-    scanf(" %s", &Njoueur.nom);
-    printf("\n");
+
+    do{
+        printf("Nom: ");
+        scanf(" %s", &Njoueur.nom);
+        printf("\n\n");
+        if(Njoueur.nom[0]<'A'){
+        	printf("Le Premier lettre doit etre positif\n");
+        	while(getchar()!='\n');
+		}
+    }while(Njoueur.nom[0]<'A');
+
     initialiserDate(&Njoueur);
     calculerAge(&Njoueur);
 
@@ -181,7 +268,7 @@ int ajouter_un_joueur(){
         printf("\n");
         //numeroMaillot unique ?
         for(int i=0;i<nombre_joueurs;i++){
-            if(Njoueur.numeroMaillot==joueurs[i].numeroMaillot){
+            if(Njoueur.numeroMaillot==equipe[i].numeroMaillot){
                 numeroMaillot_unique = 0;
             }
         }
@@ -191,11 +278,9 @@ int ajouter_un_joueur(){
     }while(!numeroMaillot_unique || Njoueur.numeroMaillot<0 || !estInt);
     // Njoueur.numeroMaillot = numeroMaillot;
     
-    printf("Poste de joueur  (g:gardien, d:defenseur, m:milieu, a:attaquant): ");
-    scanf("%c", &Njoueur.poste);
     do{
-        printf("\n\nChoix->: ");
-        scanf("%c",&Njoueur.poste);
+        printf("Poste de joueur  (g:gardien, d:defenseur, m:milieu, a:attaquant): ");
+        scanf(" %c",&Njoueur.poste);
         printf("\n\n");
         if(!char_valide(Njoueur.poste,poste_dispo,4)){
         	printf("Choix non valide\n");
@@ -205,17 +290,17 @@ int ajouter_un_joueur(){
     
     do{
         printf("Nombre de buts de joueur: ");
-        scanf("%d",&Njoueur.buts);
+        estInt = scanf("%d",&Njoueur.buts);
         printf("\n\n");
-        if(Njoueur.buts<0){
+        if(Njoueur.buts<0 || !estInt){
         	printf("Nombre de buts non valide\n");
         	while(getchar()!='\n');
 		}
-    }while(Njoueur.buts<0);
+    }while(Njoueur.buts<0 || !estInt);
     
     printf("\n\n");
 
-    joueurs[nombre_joueurs] = Njoueur;
+    equipe[nombre_joueurs] = Njoueur;
 	printf("\n\x1b[1;32mJoueur ajoute avec succes\x1b[0m\n");
 	printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
 	afficher_un_joueur(nombre_joueurs);
@@ -270,12 +355,79 @@ void ajouter(){
 	}
 	goto Ajouter;
 }
+
+//--------------Modifications--------------
+int touve_joueur_par_id(char id[]){
+    int index_joueur;
+    for(int i=0;i<nombre_joueurs;i++){
+        if(strcmp(id, equipe[i].Id)==0){
+            return i;
+        }
+    }
+    return -1;
+}
+
+void modifier(){
+    char id[6], index_joueur, poste;
+    int choix, choix_dispo[4] = {0, 1, 2, 3};
+    Modifier:
+        printf("\t\t\t\t\t\x1b[42m           MENU DE Modifications           \x1b[0m\n\n");
+        printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
+        for(int i=0;i<nombre_joueurs;i++){
+            afficher_un_joueur(i);
+        }
+        printf("ID: ");
+        scanf("%s",&id);
+        index_joueur = touve_joueur_par_id(id);
+        if(index_joueur>-1){
+            printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
+            afficher_un_joueur(index_joueur);
+            printf("\t\t\t\t\t1. Modifier le poste.\n");//v
+            printf("\t\t\t\t\t2. Modifier age. \n");//v
+            printf("\t\t\t\t\t3. Modifier le nombre de buts. \n");//v
+            printf("\t\t\t\t\t0. Menu Precidente\n");
+            do{
+                printf("\n\nChoix->: ");
+                scanf("%d",&choix);
+                printf("\n\n");
+                if(!choix_valide(choix,choix_dispo,4)){
+                    printf("Choix non valide\n");
+                    while(getchar()!='\n');        	
+                }
+            }while(!choix_valide(choix,choix_dispo,4));
+
+            if(choix==0){
+                goto Modifier;
+            } else if(choix==1){
+                //Validation de nouveau Poste
+                do{
+			        printf("nouveau poste (g:gardien, d:defenseur, m:milieu, a:attaquant): ");
+			        scanf(" %c",&poste);
+			        printf("\n\n");
+			        if(!char_valide(poste,poste_dispo,4)){
+			        	printf("Poste non valide\n");
+			        	while(getchar()!='\n');        	
+					}
+			    }while(!char_valide(poste,poste_dispo,4));
+                equipe[index_joueur].poste = poste;
+                printf("Poste modifie avec succes\n");
+            } else if(choix==2){
+
+            }
+            
+        }
+        printf("Apuyer Entrer pour continuer\n");
+        getchar();
+        getchar();
+    goto Modifier;
+
+}
 void supprimer_un_contact(int IdJoueur){
 	printf("Le joueur\n");
 	printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
 	afficher_un_joueur(IdJoueur);
 	for (int i = IdJoueur; i < nombre_joueurs - 1; i++) {
-        joueurs[i] = joueurs[i + 1];
+        equipe[i] = equipe[i + 1];
     }
     nombre_joueurs--;
 }
@@ -284,13 +436,16 @@ void supprimer(){
     int index_joueur = -1;
     int id_existe = 0;
 
-    afficher();
+    printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
+    for(int i=0;i<nombre_joueurs;i++){
+        afficher_un_joueur(i);
+    }
 
     printf("\nID du joueur: ");
     scanf("%s", id);
 
     for(int i=0; i<nombre_joueurs; i++){
-        if(strcmp(id, joueurs[i].Id)==0){
+        if(strcmp(id, equipe[i].Id)==0){
             id_existe = 1;
             index_joueur = i;
             break;
@@ -328,6 +483,9 @@ void supprimer(){
     while(getchar()!='\n');
     getchar();
 }
+
+
+//--------------Rechercher--------------
 void rechercher(){
     char id[6];
     char nom[20];
@@ -357,7 +515,7 @@ void rechercher(){
         scanf("%s", id);
         trouve = 0;
         for(int i=0;i<nombre_joueurs;i++){
-            if(strcmp(id, joueurs[i].Id)==0){
+            if(strcmp(id, equipe[i].Id)==0){
                 printf("\n\x1b[1;32mLe joueur avec ID = %s est trouve :\x1b[0m\n", id);
 				printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
                 afficher_un_joueur(i);
@@ -374,7 +532,7 @@ void rechercher(){
         scanf("%s", nom);
         trouve = 0;
         for(int i=0;i<nombre_joueurs;i++){
-            if(strcmp(nom, joueurs[i].nom)==0){
+            if(strcmp(nom, equipe[i].nom)==0){
                 printf("\n\x1b[1;32mLe joueur avec nom = %s est trouvé :\x1b[0m\n", nom);
                 afficher_un_joueur(i);
                 trouve = 1;
@@ -389,10 +547,13 @@ void rechercher(){
     while(getchar()!='\n');
     getchar();
 }
+
+
+//--------------Statistiques--------------
 int age_moyen(){
 	int s=0;
 	for(int i=0;i<nombre_joueurs;i++){
-		s = s + joueurs[i].age;
+		s = s + equipe[i].age;
 	}
 	return s/nombre_joueurs;
 }
@@ -451,6 +612,8 @@ void stat(){
 	goto stat;
 }
 
+
+//--------------Presentation--------------
 void about(){
 	printf("\t\t\t\t\t\t\t\x1b[1;34;4m     PROJET DE FIN DE SAS 2025     \x1b[0m\n\n");
 	printf("\t\t\t\t\t\t\t           \x1b[1;34;4mMohcine OTMANE\x1b[0m          \n\n");
@@ -487,14 +650,12 @@ int menu(){
         	while(getchar()!='\n');        	
 		}
     }while(!choix_valide(choix,choix_dispo,7));
-    printf("le choix est: %d\n",choix);
 	return choix;
 }
-
 int main(){
 	int choix = 0;
 	for(int i=0;i<nombre_joueurs;i++){
-		calculerAge(&joueurs[i]);
+		calculerAge(&equipe[i]);
 	}
 	do{
 		system("cls");
