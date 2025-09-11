@@ -416,9 +416,9 @@ void stat(){
 		printf("\t\t\t\t\t\t\t\x1b[42m           MENU DE STATISTIQUES           \x1b[0m\n\n");
 		printf("\t\t\t\t\t\t\t\x1b[1;32m1. Nombre total de joueurs.\x1b[0m\n");//v
 		printf("\t\t\t\t\t\t\t2. Age moyen des joueurs.\n");//v
-		printf("\t\t\t\t\t\t\t3. les joueurs ayant marque plus de X buts.\n");
-		printf("\t\t\t\t\t\t\t\x1b[1;31m4. Le top buts.\x1b[0m\n");
-		printf("\t\t\t\t\t\t\t5. le joueur le plus jeune et le plus age.\n");
+		printf("\t\t\t\t\t\t\t3. les joueurs ayant marque plus de X buts.\n");//x
+		printf("\t\t\t\t\t\t\t\x1b[1;31m4. Le top buts.\x1b[0m\n");//x
+		printf("\t\t\t\t\t\t\t5. le joueur le plus jeune et le plus age.\n");//x
 		printf("\t\t\t\t\t\t\t0. Menu Principale\n");
 
 
