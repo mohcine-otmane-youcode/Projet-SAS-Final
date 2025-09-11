@@ -15,7 +15,7 @@ struct Joueur{
 	struct tm* dateInscription;
 };
 struct tm dateNaissance = {0};
-int nombre_joueurs = 3,util_exit=0, nombre_id = 4;
+int nombre_joueurs = 3,util_exit=0, nombre_id = 4, estInt;
 
 char poste_dispo[4] = {'g', 'd', 'm', 'a'};;//id supprime ne doit pas etre reutilise
 
@@ -88,6 +88,7 @@ void calculerAge(struct Joueur* joueur){
 	time_t temps_0 = time(0);
 	struct tm* date_aujourdhui = localtime(&temps_0);
 	joueur->age = date_aujourdhui->tm_year - joueur->dateNaissance->tm_year;
+    printf("Age calcule\n");
 }
 
 
@@ -113,27 +114,8 @@ int char_valide(char poste,char poste_dispo[],int nombre_poste){
 	return valide;
 }
 
-// int entrer_choix(int *choix, char titre_choix[], int unique){
-//     do{
-//         numeroMaillot_unique = 1;
-//         printf("%s de joueur: ",titre_choix);
-//         getchar();
-//         estInt = scanf("%d", choix);
-//         printf("\n");
-//         //numeroMaillot unique ?
-//         if(unique){
-//             for(int i=0;i<nombre_joueurs;i++){
-//             if(Njoueur.numeroMaillot==equipe[i].numeroMaillot){
-//                 numeroMaillot_unique = 0;
-//             }
-//             }
-//             if(numeroMaillot_unique==0){
-//                 printf("Ce %s existe deja\n", titre_choix);
-//             }
-//         }
-        
-//     }while(!numeroMaillot_unique || Njoueur.numeroMaillot<0 || !estInt);
-// }
+
+
 
 
 //--------------Afficher--------------
@@ -149,7 +131,7 @@ void trier_nom() {
     }
 }
 
-int trier_age(){
+void trier_age(){
     for(int i = 0; i < nombre_joueurs - 1; i++) {
         for(int j = i + 1; j < nombre_joueurs; j++) {
             if(equipe[i].age > equipe[j].age) {
@@ -558,16 +540,23 @@ int age_moyen(){
 	return s/nombre_joueurs;
 }
 
-// int max_min(int zerosimax){
-// 	int max,min;
-// 	if(zerosimax==0){
-// 		for(int i=0;)
-// 		return max;
-// 	} else{
+int max_min(int zerosimax){
+	int max,min;
+	if(zerosimax==0){
+		for(int i = 0; i < nombre_joueurs - 1; i++) {
+            max = equipe[i].age;
+            for(int j = i + 1; j < nombre_joueurs; j++) {
+                if(max < equipe[j].age) {
+                    max= equipe[j].age;
+                }
+            }
+        }
+		return max;
+	} else{
 
-// 		return min;
-// 	}
-// }
+		return min;
+	}
+}
 
 void stat(){
 	int choix, choix_dispo[6] = {0,1,2,3,4,5};
@@ -600,11 +589,29 @@ void stat(){
 		} else if(choix==2){
 			printf("Age moyen de joueurs est: %d\n",age_moyen());
 		} else if(choix==3){
-			printf("Age moyen de joueurs est: %d\n",age_moyen());
+            int X;
+			printf("les joueurs ayant marque plus de X buts: %d\n",age_moyen());
+
+            do{
+                printf("\n\nNombre de buts: ");
+                estInt = scanf("%d",&X);
+                printf("\n\n");
+                if(!estInt){
+                    printf("Erreur: Nombre de buts doit etre positif\n");
+                    while(getchar()!='\n');
+                }
+            }while(!estInt);
+            
+            printf("\t\t\t\t\t\x1b[44m%-5s %-10s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
+            for(int i=0;i<nombre_joueurs;i++){
+                if(equipe[i].buts>=X){
+                    afficher_un_joueur(i);
+                }
+            }
 		} else if(choix==4){
 			printf("Age moyen de joueurs est: %d\n",age_moyen());
 		} else if(choix==5){
-			printf("Age moyen de joueurs est: %d\n",age_moyen());
+			printf("Le joueur le plus jeune et le plus age.: %d\n",max_min(0));
 		}
 		printf("Apuier sur Entrer pour continuer\n");
 		getchar();
