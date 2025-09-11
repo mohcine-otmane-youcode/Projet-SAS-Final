@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 
+
 struct Joueur{
 	int numeroMaillot;
 	int age;
@@ -17,7 +18,7 @@ struct Joueur{
 struct tm dateNaissance = {0};
 int nombre_joueurs = 3,util_exit=0, nombre_id = 4;
 
-char poste_dispo[4] = {'g', 'd', 'm', 'a'};;//id supprime ne doit pas etre reutilise
+char poste_dispo[4] = {'g', 'd', 'm', 'a'};
 
 
 //--------------Initialisations--------------
@@ -50,44 +51,43 @@ void initialiserId(struct Joueur* joueur) {
     nombre_id++;
     printf("ID succes\n");
 }
-void initialiserDate(struct Joueur* joueur){
+void initialiserDate(struct tm* date){
 	int estInt;
 	printf("Entrer la date de naissance de joueur\n");
 	do{
         printf("Jour: ");
-        estInt = scanf("%d",&dateNaissance.tm_mday);
+        estInt = scanf("%d",&date->tm_mday);
         printf("\n\n");
-        if(dateNaissance.tm_mday>30 || dateNaissance.tm_mday<0 || !estInt){
+        if(date->tm_mday>30 || date->tm_mday<0 || !estInt){
         	printf("Jours non valide\n");
         	while(getchar()!='\n');        	
 		}
-    }while(dateNaissance.tm_mday>30 || dateNaissance.tm_mday<0 || !estInt);
+    }while(date->tm_mday>30 || date->tm_mday<0 || !estInt);
     do{
         printf("Mois: ");
-        estInt = scanf("%d",&dateNaissance.tm_mon);
+        estInt = scanf("%d",&date->tm_mon);
         printf("\n\n");
-        if(dateNaissance.tm_mon>12 || dateNaissance.tm_mon<0 || !estInt){
+        if(date->tm_mon>12 || date->tm_mon<0 || !estInt){
         	printf("Mois non valide\n");
         	while(getchar()!='\n');      	
 		}
-    }while(dateNaissance.tm_mon>12 || dateNaissance.tm_mon<0 || !estInt);
+    }while(date->tm_mon>12 || date->tm_mon<0 || !estInt);
     do{
         printf("Annee: ");
-        estInt = scanf("%d",&dateNaissance.tm_year);
+        estInt = scanf(" %d",&date->tm_year);
         printf("\n\n");
-        if(dateNaissance.tm_year<1980){
+        if(date->tm_year<1980 || date->tm_year>2005 || !estInt){
         	printf("Annee non valide\n");
         	while(getchar()!='\n');    	
 		}
-    }while(dateNaissance.tm_year<1980 || dateNaissance.tm_year<0 || !estInt);
-    dateNaissance.tm_year -= 1900;
-    dateNaissance.tm_mon -= 1;
-    joueur->dateNaissance = &dateNaissance;
+    }while(date->tm_year<1980 || date->tm_year>2005 || !estInt);
+    date->tm_year -= 1900;
+    date->tm_mon -= 1;
 }
 void calculerAge(struct Joueur* joueur){
 	time_t temps_0 = time(0);
 	struct tm* date_aujourdhui = localtime(&temps_0);
-	joueur->age = date_aujourdhui->tm_year - joueur->dateNaissance->tm_year;
+	joueur->age = date_aujourdhui->tm_year - joueur->dateNaissance->tm_year - 100;
 }
 
 
@@ -257,7 +257,7 @@ int ajouter_un_joueur(){
 		}
     }while(Njoueur.nom[0]<'A');
 
-    initialiserDate(&Njoueur);
+    initialiserDate(Njoueur.dateNaissance);
     calculerAge(&Njoueur);
 
     do{
