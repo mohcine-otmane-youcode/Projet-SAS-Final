@@ -305,8 +305,8 @@ int ajouter_un_joueur(){
     printf("\n\n");
 
     equipe[nombre_joueurs] = Njoueur;
-	printf(VR"Joueur ajoute avec succes"RS"\n");
-	printf(BL"%-5s %-20s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut"RS);
+	printf(VR"Joueur ajoute avec succes"RS"\n\n");
+	printf("\x1b[44m%-5s %-20s %-15s %-5s %-5s %-15s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut","Date Inscription");
 	afficher_un_joueur(nombre_joueurs);
     
     nombre_joueurs++;
@@ -315,10 +315,10 @@ void ajouter(){
 	int choix, choix_dispo[3] = {0,1,2};
 	Ajouter:
 	system("cls");
-	printf("\t\t\x1b[42m           MENU DE AJOUTE           \x1b[0m\n\n");
-	printf("\t\t\x1b[1;32m1. Ajouter un joueur.\x1b[0m\n");
-	printf("\t\t2. Ajouter plusieurs joueurs en une seule operation.\n");
-	printf("\t\t0. Menu Principale\n");
+	printf("\x1b[42m           MENU DE AJOUTE           \x1b[0m\n\n");
+	printf("\x1b[1;32m1. Ajouter un joueur.\x1b[0m\n");
+	printf("2. Ajouter plusieurs joueurs en une seule operation.\n");
+	printf("0. Menu Principale\n");
         
     entrer_choix(&choix,3);
     
@@ -326,14 +326,14 @@ void ajouter(){
         return;
     } else if(choix==1){
         system("cls");
-        printf("\t\t\x1b[42m           AJOUTER UN JOUEUR           \x1b[0m\n\n");
+        printf("\x1b[42m           AJOUTER UN JOUEUR           \x1b[0m\n\n");
         ajouter_un_joueur();
         printf("Appuier sur Entrer pour continuer\n");
         getchar();
         getchar();
     } else if(choix==2){
         system("cls");
-        printf("\t\t\x1b[42m           AJOUTER 3 JOUEURS A LA FOIS           \x1b[0m\n\n");
+        printf("\x1b[42m           AJOUTER 3 JOUEURS A LA FOIS           \x1b[0m\n\n");
         for(int i=1;i<=3;i++){
         	printf("Il vous reste "VR"%d"RS" joueurs a entrer\n",4-i);
         	ajouter_un_joueur();
@@ -368,8 +368,8 @@ void modifier() {
 
     while (continuer) {
         system("cls");
-        printf("\t\t\x1b[42m           MENU DE MODIFICATIONS           \x1b[0m\n\n");
-        printf("%-5s %-20s %-15s %-5s %-5s %-15s %-15s\n", "ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
+        printf("\x1b[42m           MENU DE MODIFICATIONS           \x1b[0m\n\n");
+        printf("\x1b[44m%-5s %-20s %-15s %-5s %-5s %-15s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut","Date Inscription");
         for (int i = 0; i < nombre_joueurs; i++) {
             afficher_un_joueur(i);
         }
@@ -562,10 +562,10 @@ void rechercher(){
     char nom[20];
     int choix, trouve, choix_dispo[3] = {0,1,2};
 
-	printf("\t\t\x1b[42m           MENU DE RECHERCHE           \x1b[0m\n\n");
-	printf("\t\t1. Recherche par \x1b[1;36mID\x1b[0m\x1b[0m\n");//v
-	printf("\t\t2. Recherche par \x1b[1;36mNom\x1b[0m\n");//v
-	printf("\t\t0. Retour au \x1b[1;32mMenu Principal\x1b[0m\n");
+	printf("\x1b[42m           MENU DE RECHERCHE           \x1b[0m\n\n");
+	printf("1. Recherche par \x1b[1;36mID\x1b[0m\x1b[0m\n");//v
+	printf("2. Recherche par \x1b[1;36mNom\x1b[0m\n");//v
+	printf("0. Retour au \x1b[1;32mMenu Principal\x1b[0m\n");
 
 
 	entrer_choix(&choix,3);
@@ -683,13 +683,13 @@ void stat(){
 	
 	stat:
 		system("cls");
-		printf("\t\t\t\t\x1b[42m           MENU DE STATISTIQUES           \x1b[0m\n\n");
-		printf("\t\t\t\t1. Nombre total de joueurs.\n");//v
-		printf("\t\t\t\t2. Age moyen des joueurs.\n");//v
-		printf("\t\t\t\t3. les joueurs ayant marque plus de X buts.\n");//v
-		printf("\t\t\t\t4. Afficher le meilleur buteur.\n");//x
-		printf("\t\t\t\t5. le joueur le plus jeune et le plus age.\n");//v
-		printf("\t\t\t\t0. Menu Principale\n");
+		printf("\x1b[42m           MENU DE STATISTIQUES           \x1b[0m\n\n");
+		printf("1. Nombre total de joueurs.\n");//v
+		printf("2. Age moyen des joueurs.\n");//v
+		printf("3. les joueurs ayant marque plus de X buts.\n");//v
+		printf("4. Afficher le meilleur buteur.\n");//x
+		printf("5. le joueur le plus jeune et le plus age.\n");//v
+		printf("0. Menu Principale\n");
 
 	    
 	    entrer_choix(&choix, 6);
@@ -756,7 +756,7 @@ void about(){
     system("cls");
 	printf("\x1b[1;34;4m     PROJET DE FIN DE SAS 2025      \x1b[0m\n\n");
 	printf("           \x1b[1;34;4mMohcine \x1b[1;37;4mOTMANE\x1b[0m          \n\n");
-	printf("           \x1b[1;34;4mHoussni OUCHAD\x1b[0m          \n\n");
+	printf("           \x1b[1;34;4mHoussni OUCHAD\x1b[0m          \n\n"); //Le formateur Monsieur Houssni OUCHAD
 	printf("                           _     \n");
 	printf("  _  _ ___ _  _ __ ___  __| |___ \n");
 	printf(" | || / _ \\ || / _/ _ \\/ _` / -_) \n");
@@ -771,6 +771,7 @@ void about(){
 
 //--------------Stockage---------------
 
+//L'enregistrement est teste et marche bien, plus de testes restent a faire
 void enregestrer_dans_fichier(){
     //Ouvrir le fichier
     FILE *fich;
@@ -789,8 +790,8 @@ void enregestrer_dans_fichier(){
             //Convertir struct Joueur en string
             sprintf(donnees, "%s %s %d %d %d %c %c",joueur->Id,joueur->nom,joueur->numeroMaillot,joueur->age,joueur->buts,joueur->poste,joueur->statut);
             fputs(donnees, fich);
-            fputs("\n",fich);
-            Sleep(100);
+             fputs("\n",fich);
+           Sleep(100);
             printf(VR"fichier:\\>Enregestrer %s: %s\n"RS, joueur->Id,joueur->nom);
         }
         printf(VR"Donnees enregestrees avec succes\n"RS);
@@ -800,19 +801,29 @@ void enregestrer_dans_fichier(){
     fclose(fich);
 }
 
+
+//J'ai trouve des dificultes en lisant les donnees de fichier
+//J'ai essaye fscanf mais j'ai pas pu utiliser EOF correctement
 void lire_de_fichier(){
     //Ouvrir le fichier
     FILE *fich;
     fich = fopen("equipe.txt","r");
+    
+
     if(fich == NULL){
-        printf("Erreur: le fichier ne peut pas etre ouvert");
+        printf(RG"Erreur: le fichier ne peut pas etre ouvert\n"RS);
         return;
+    } else {
+//        printf(VR"Fichier ouvert\n"RS);
+//        fscanf(fich,"%s %s %d %d %d %c %c",equipe[nombre_joueurs].Id,equipe[nombre_joueurs].nom,equipe[nombre_joueurs].numeroMaillot,equipe[nombre_joueurs].age,equipe[nombre_joueurs].buts,equipe[nombre_joueurs].poste,equipe[nombre_joueurs].statut);
+//        //Convertir struct Joueur en string
+//        Sleep(100);
+//        printf(VR"fichier:\\>Lire %s: %s\n"RS, equipe[nombre_joueurs].Id,equipe[nombre_joueurs].nom);
+//        nombre_joueurs++;
+//        printf(VR"Donnees lues avec succes\n"RS);
     }
 
     //Lire les donnees de fichier
-
-    
-
 
     //Fermer le fichier
     fclose(fich);
@@ -836,6 +847,7 @@ int main(){
 	for(int i=0;i<nombre_joueurs;i++){
 		calculerAge(&equipe[i]);
 	}
+    // lire_de_fichier();
 	do{
 		system("cls");
 		menu();
