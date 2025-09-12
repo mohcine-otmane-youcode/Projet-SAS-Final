@@ -1,0 +1,10 @@
+0001 Yassine Bounou 1 34 0 g t
+0002 Achraf Hakimi 2 27 1 d t
+0003 Nayef Aguerd 5 29 2 d t
+0004 Romain Saiss 6 36 3 d t
+0005 Sofyan Amrabat 4 29 7 m t
+0006 Hakim Ziyech 7 32 4 m t
+0007 Youssef En-Nesyri 19 28 12 a t
+0008 Abde Ezzalzouli 16 24 8 a r
+0009 Noussair Mazraoui 3 28 2 d r
+0010 Sofiane Boufal 17 32 3 a r
