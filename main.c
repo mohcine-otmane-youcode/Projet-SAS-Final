@@ -755,8 +755,10 @@ void stat(){
 void about(){
     system("cls");
 	printf("\x1b[1;34;4m     PROJET DE FIN DE SAS 2025      \x1b[0m\n\n");
-	printf("           \x1b[1;34;4mMohcine \x1b[1;37;4mOTMANE\x1b[0m          \n\n");
-	printf("           \x1b[1;34;4mHoussni OUCHAD\x1b[0m          \n\n"); //Le formateur Monsieur Houssni OUCHAD
+	printf("           \x1b[1;34;4mMohcine \x1b[1;37;4mOTMANE\x1b[0m          \n\n"); //Mon nom: Mohcine Otmane
+	printf("           \x1b[1;37;4mHoussni \x1b[1;34;4mOUCHAD\x1b[0m          \n\n"); //Mon formateur: Monsieur Houssni OUCHAD
+    printf("              "VR"VICTORIA"RS"          \n\n");
+    printf("         "VR"Football Team Manager"RS"          \n\n");
 	printf("                           _     \n");
 	printf("  _  _ ___ _  _ __ ___  __| |___ \n");
 	printf(" | || / _ \\ || / _/ _ \\/ _` / -_) \n");
