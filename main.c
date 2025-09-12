@@ -110,7 +110,7 @@ void initialiserDate(struct Joueur* joueur){
     dateNaissance.tm_year -= 1900;
     dateNaissance.tm_mon -= 1;
     joueur->dateNaissance = &dateNaissance;
-    printf(VR"Date inisialise"RS"\n");
+    printf(VR"Date de naissance inisialise"RS"\n");
 }
 void calculerAge(struct Joueur* joueur){
 	time_t temps_0 = time(0);
@@ -174,7 +174,12 @@ void afficher_un_joueur(int index_joueur){
         case 'r': strcpy(statuts, "Remplacant"); break;
         default: strcpy(statuts, "Inconnu"); break;
     }
-	printf("%-5s %-20s %-15d %-5d %-5d %-15s %-15s\n\n",joueur->Id,joueur->nom,joueur->numeroMaillot,joueur->age,joueur->buts,postes,statuts);
+    if(joueur->buts>9){
+        printf(VR"<%-5s %-20s %-15d %-5d %-5d %-15s %-9s>"RS"\n\n",joueur->Id,joueur->nom,joueur->numeroMaillot,joueur->age,joueur->buts,postes,statuts);
+    } else {
+        printf("%-5s %-20s %-15d %-5d %-5d %-15s %-9s\n\n",joueur->Id,joueur->nom,joueur->numeroMaillot,joueur->age,joueur->buts,postes,statuts);
+    }
+	
 
 }
 void afficher(){
@@ -186,7 +191,7 @@ void afficher(){
         printf("3. Trier les joueurs par Age.\n");//v
         printf("4. Afficher les joueurs par poste.\n");//v
         printf("0. Menu Principale\n");
-    entrer_choix(&choix, 4);
+    entrer_choix(&choix, 5);
     if(choix==0){
         return;
     } else if(choix==1){
@@ -212,11 +217,9 @@ void afficher(){
             }
         }while(poste!='g' && poste!='d' && poste!='m' && poste!='a');
         printf("\x1b[44m%-5s %-20s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
-        if(choix==3){
-            for(int i=0;i<nombre_joueurs;i++){
-                if(equipe[i].poste==poste){
-                    afficher_un_joueur(i); 
-                }
+        for(int i=0;i<nombre_joueurs;i++){
+            if(equipe[i].poste==poste){
+                afficher_un_joueur(i); 
             }
         }
     }
@@ -245,7 +248,6 @@ int ajouter_un_joueur(){
         getchar();
         estInt = scanf("%d", &Njoueur.numeroMaillot);
         printf("\n");
-        //numeroMaillot unique ?
         for(int i=0;i<nombre_joueurs;i++){
             if(Njoueur.numeroMaillot==equipe[i].numeroMaillot){
                 numeroMaillot_unique = 0;
@@ -255,7 +257,6 @@ int ajouter_un_joueur(){
             printf(RG"Ce numero de maillot existe deja"RS"\n");
         }
     }while(!numeroMaillot_unique || Njoueur.numeroMaillot<0 || !estInt);
-    // Njoueur.numeroMaillot = numeroMaillot;
     
     do{
         printf("Poste(g:Gardien, d:Defenseur, m:Milieu, a:Attaquant):\\> ");
@@ -353,104 +354,141 @@ int touve_joueur_par_id(char id[]){
     }
     return -1;
 }
-void modifier(){
-    Modifier:
-    system("cls");
+void modifier() {
+    char id[6], poste, statut, nouveau_nom[30];
+    int index_joueur = -1, choix, nouveaux_buts, nouveau_numero;
+    int continuer = 1;
 
-    printf("\t\t\x1b[42m           MENU DE MODIFICATIOS           \x1b[0m\n\n");
+    while (continuer) {
+        system("cls");
 
-    char id[6];
-    int index_joueur = -1;
-    printf("\x1b[44m%-5s %-20s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n", "ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
-    for(int i = 0; i < nombre_joueurs; i++) {
-        afficher_un_joueur(i);
-    }
-    printf("\nSelectioner ID:\\> ");
-    scanf("%s", id);
+        printf("===== MENU DE MODIFICATIONS =====\n\n");
+        printf("%-5s %-20s %-15s %-5s %-5s %-15s %-15s\n", "ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
 
-    index_joueur = touve_joueur_par_id(id);
+        for (int i = 0; i < nombre_joueurs; i++) {
+            afficher_un_joueur(i);
+        }
 
-    if(index_joueur == -1) {
-        printf("Joueur non trouvé !\n");
-        printf("Appuyer sur Entrer pour continuer...\n");
-        getchar(); getchar();
-        return;
-    } else {
-        printf("\x1b[44m%-5s %-20s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n", "ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
+        printf("\nSelectionner ID: ");
+        scanf("%s", id);
+
+        index_joueur = touve_joueur_par_id(id);
+
+        if (index_joueur == -1) {
+            printf("\nJoueur non trouve.\n");
+            printf("Appuyer sur Entree pour continuer...\n");
+            getchar(); getchar();
+            return;
+        }
+
+        system("cls");
+        printf("Joueur selectionne:\n");
+        printf("%-5s %-20s %-15s %-5s %-5s %-15s %-15s\n", "ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
         afficher_un_joueur(index_joueur);
+
+        printf("\nModifier:\n");
+        printf("1. Nom\n");
+        printf("2. Numero de maillot\n");
+        printf("3. Nombre de buts\n");
+        printf("4. Poste\n");
+        printf("5. Statut\n");
+        printf("0. Retour\n");
+
+        entrer_choix(&choix, 5);
+
+        switch (choix) {
+            case 0:
+                continuer = 0;
+                break;
+
+            case 1:
+                printf("Nouveau nom: ");
+                scanf(" %[^\n]", nouveau_nom);
+                strcpy(equipe[index_joueur].nom, nouveau_nom);
+                printf("Nom modifie avec succes.\n");
+                break;
+
+            case 2:
+                do {
+                    printf("Nouveau numero de maillot: ");
+                    if (scanf("%d", &nouveau_numero) != 1 || nouveau_numero < 0) {
+                        while (getchar() != '\n');
+                        continue;
+                    }
+
+                    int unique = 1;
+                    for (int i = 0; i < nombre_joueurs; i++) {
+                        if (i != index_joueur && equipe[i].numeroMaillot == nouveau_numero) {
+                            unique = 0;
+                            break;
+                        }
+                    }
+
+                    if (!unique) {
+                        printf("Ce numero est deja utilise.\n");
+                    } else {
+                        equipe[index_joueur].numeroMaillot = nouveau_numero;
+                        printf("Numero modifie avec succes.\n");
+                        break;
+                    }
+                } while (1);
+                break;
+            case 3:
+                do {
+                    printf("Nouveau nombre de buts: ");
+                    if (scanf("%d", &nouveaux_buts) != 1 || nouveaux_buts < 0) {
+                        while (getchar() != '\n');
+                    } else {
+                        equipe[index_joueur].buts = nouveaux_buts;
+                        printf("Buts modifies avec succes.\n");
+                        break;
+                    }
+                } while (1);
+                break;
+            case 4:
+                do {
+                    printf("Poste(g:Gardien, d:Defenseur, m:Milieu, a:Attaquant):\\> ");
+                    scanf(" %c", &poste);
+                    if (poste == 'g' || poste == 'd' || poste == 'm' || poste == 'a') {
+                        equipe[index_joueur].poste = poste;
+                        printf(VR"Poste modifie avec succes."RS"\n");
+                        break;
+                    } else {
+                        while (getchar() != '\n');
+                    }
+                } while (1);
+                break;
+
+            case 5:
+                do {
+                    printf("Statut(t:Tutolaire, r:Remplacant):\\> ");
+                    scanf(" %c", &statut);
+                    if (statut == 't' || statut == 'r') {
+                        equipe[index_joueur].statut = statut;
+                        printf(VR"Statut modifie avec succes."RS"\n");
+                        break;
+                    } else {
+                        while (getchar() != '\n');
+                    }
+                } while (1);
+                break;
+
+            default:
+                break;
+        }
+
+        printf("\nModifier un autre attribu ? (o/n): ");
+        char reponse;
+        scanf(" %c", &reponse);
+        if (reponse != 'o' && reponse != 'O') {
+            continuer = 0;
+        }
     }
-
-    int choix;
-    char poste, statut;
-    char nouveau_nom[30];
-    int nouveaux_buts;
-    int nouveau_numero;
-
-    printf("\nMoodifier\n");
-    printf("1. Poste\n");
-    printf("2. Statut\n");
-    printf("3. Nom\n");
-    printf("4. Nombre de buts\n");
-    printf("5. Numero de maillot\n");
-    printf("0. Retour\n");
-
-    entrer_choix(&choix, 5);
-
-    if (choix == 0) return;
-
-    if (choix == 1) {
-        do {
-            printf("Poste(g:gardien, d:defenseur, m:milieu, a:attaquant):\\> ");
-            scanf(" %c", &poste);
-            printf("\n\n");
-            if(poste != 'g' && poste != 'd' && poste != 'm' && poste != 'a') {
-                printf("Choix non valide\n");
-                while(getchar() != '\n');        	
-            }
-        } while(poste != 'g' && poste != 'd' && poste != 'm' && poste != 'a');
-
-        equipe[index_joueur].poste = poste;
-        printf("Poste modifie avec succes\n");
-
-    } else if (choix == 2) {
-        do {
-            printf("Statut(t:Titulaire, r:Remplaçant):\\> ");
-            scanf(" %c", &statut);
-            printf("\n\n");
-            if(statut != 't' && statut != 'r') {
-                printf("Choix non valide\n");
-                while(getchar() != '\n');        	
-            }
-        } while(statut != 't' && statut != 'r');
-
-        equipe[index_joueur].statut = statut;
-        printf("Statut modifie avec succes\n");
-
-    } else if (choix == 3) {
-        printf("Nouveau nom:\\> ");
-        scanf(" %[^\n]", &nouveau_nom);
-        strcpy(equipe[index_joueur].nom, nouveau_nom);
-        printf("Nom modifié avec succes\n");
-
-    } else if (choix == 4) {
-        printf("Nouveau nombre de buts:\\> ");
-        scanf("%d", &nouveaux_buts);
-        equipe[index_joueur].buts = nouveaux_buts;
-        printf("Nombre de buts modifie avec succes\n");
-
-    } else if (choix == 5) {
-        printf("Nouveau numero de maillot:\\> ");
-        scanf("%d", &nouveau_numero);
-        equipe[index_joueur].numeroMaillot = nouveau_numero;
-        printf("Numero de maillot modifie avec succes\n");
-    }
-
-        printf("Appuyer Entrer pour continuer\n");
-        getchar();
-        getchar();
-
-    goto Modifier;
+    printf("Appuyer sur Entree pour continuer\n");
+    getchar();
+    getchar();
 }
+
 void supprimer_un_contact(int IdJoueur){
 	printf("Le joueur\n");
 	printf("\x1b[44m%-5s %-20s %-15s %-5s %-5s %-15s %-15s\x1b[0m\n","ID", "Nom", "Numero", "Age", "Buts", "Poste", "Statut");
